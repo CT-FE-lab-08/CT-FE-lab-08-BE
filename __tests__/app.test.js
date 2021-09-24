@@ -80,7 +80,7 @@ describe('demo routes', () => {
     });
 
     const res2 = await request(app)
-      .put(`/api/v1/alchemy-cry-lab/${res1.id}`)
+      .put(`/api/v1/alchemy-cry-lab/update/${res1.id}`)
       .send({
         event: false,
         note: ''
@@ -88,10 +88,10 @@ describe('demo routes', () => {
 
     expect(res2.body).toEqual({
       id: res1.id,
-      date: res1.date,
       name: 'DJ',
       event: false,
-      note: ''
+      note: '',
+      date: res1.date,
     });
   });
 
