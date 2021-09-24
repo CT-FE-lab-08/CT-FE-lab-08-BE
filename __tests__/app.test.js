@@ -2,6 +2,7 @@ import pool from '../lib/utils/pool.js';
 import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
+import Entry from '../lib/models/Entry.js';
 
 const currentDate = new Date().toISOString().slice(0, 10);
 
@@ -14,7 +15,7 @@ describe('demo routes', () => {
     const entry = {
       name: 'DJ',
       event: true,
-      note: ''
+      note: 'my sorrow is an ocean'
     };
 
     const res = await request(app)
@@ -27,6 +28,25 @@ describe('demo routes', () => {
       ...entry,
     });
   });
+
+  it('GET entry by id', async () => {
+    const res1 = await Entry.create({
+      name: 'DJ',
+      event: true,
+      note: 'my sorrow is an ocean'
+    });
+
+    const res2 = await Entry.create({
+      name: '.Kubisiak',
+      event: true,
+      note: 'dab soon'
+    });
+
+    const res = await request(app).get('/api/v1/alchemy-cry-lab/2');
+    expect(res.body).not.toEqual(res1);
+    expect(res.body).toEqual(res2);
+  });
+
 
   afterAll(() => {
     pool.end();
