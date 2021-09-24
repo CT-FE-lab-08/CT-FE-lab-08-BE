@@ -3,6 +3,8 @@ import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
 
+const currentDate = new Date().toISOString().slice(0, 10);
+
 describe('demo routes', () => {
   beforeEach(() => {
     return setup(pool);
@@ -21,7 +23,7 @@ describe('demo routes', () => {
 
     expect(res.body).toEqual({
       id: '1',
-      date: 'currentData',
+      date: currentDate,
       ...entry,
     });
   });
