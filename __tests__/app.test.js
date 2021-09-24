@@ -80,7 +80,7 @@ describe('demo routes', () => {
     });
 
     const res2 = await request(app)
-      .put(`/api/v1/alchemy-cry-lab/update/${res1.id}`)
+      .put(`/api/v1/alchemy-cry-lab/${res1.id}`)
       .send({
         event: false,
         note: ''
@@ -93,6 +93,19 @@ describe('demo routes', () => {
       note: '',
       date: res1.date,
     });
+  });
+
+  it('DELETE entry', async () => {
+    const res1 = await Entry.create({
+      name: 'DJ',
+      event: true,
+      note: 'my sorrow is an ocean'
+    });
+
+    const res2 = await request(app)
+      .delete(`/api/v1/alchemy-cry-lab/${res1.id}`);
+
+    expect(res2.body).toEqual({ message: `Entry ${res1.id} was successfully deleted.` });
   });
 
 
