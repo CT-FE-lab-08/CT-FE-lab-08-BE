@@ -29,6 +29,23 @@ describe('demo routes', () => {
     });
   });
 
+  it('GET all entries', async () => {
+    const res1 = await Entry.create({
+      name: 'DJ',
+      event: true,
+      note: 'my sorrow is an ocean'
+    });
+
+    const res2 = await Entry.create({
+      name: '.Kubisiak',
+      event: true,
+      note: 'dab soon'
+    });
+
+    const res = await request(app).get('/api/v1/alchemy-cry-lab/2');
+    expect(res.body).toEqual([res1, res2]);
+  });
+
   it('GET entry by id', async () => {
     const res1 = await Entry.create({
       name: 'DJ',
