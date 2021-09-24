@@ -11,6 +11,10 @@ describe('demo routes', () => {
     return setup(pool);
   });
 
+  afterAll(() => {
+    pool.end();
+  });
+
   it('POSTS a new entry', async () => {
     const entry = {
       name: 'DJ',
@@ -29,6 +33,7 @@ describe('demo routes', () => {
     });
   });
 
+
   it('GET all entries', async () => {
     const res1 = await Entry.create({
       name: 'DJ',
@@ -42,9 +47,10 @@ describe('demo routes', () => {
       note: 'dab soon'
     });
 
-    const res = await request(app).get('/api/v1/alchemy-cry-lab/2');
-    expect(res.body).toEqual([res1, res2]);
+    const res3 = await request(app).get('/api/v1/alchemy-cry-lab');
+    expect(res3.body).toEqual([res1, res2]);
   });
+
 
   it('GET entry by id', async () => {
     const res1 = await Entry.create({
@@ -59,13 +65,35 @@ describe('demo routes', () => {
       note: 'dab soon'
     });
 
-    const res = await request(app).get('/api/v1/alchemy-cry-lab/2');
-    expect(res.body).not.toEqual(res1);
-    expect(res.body).toEqual(res2);
+    const res3 = await request(app).get('/api/v1/alchemy-cry-lab/2');
+
+    expect(res3.body).not.toEqual(res1);
+    expect(res3.body).toEqual(res2);
   });
 
 
-  afterAll(() => {
-    pool.end();
+  it('PUT entry', async () => {
+    const res1 = await Entry.create({
+      name: 'DJ',
+      event: true,
+      note: 'my sorrow is an ocean'
+    });
+
+    const res2 = await request(app)
+      .put(`/api/v1/alchemy-cry-lab/${res1.id}`)
+      .send({
+        event: false,
+        note: ''
+      });
+
+    expect(res2.body).toEqual({
+      id: res1.id,
+      date: res1.date,
+      name: 'DJ',
+      event: false,
+      note: ''
+    });
   });
+
+
 });
